@@ -30,13 +30,12 @@ func main() {
 }
 
 func pageHandler(w http.ResponseWriter, r *http.Request) {
-	log.Print("INFO: serving index.html")
 	http.ServeFile(w, r, "index.html")
 }
 
 func scriptHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Serving script %s", r.URL.Path[1:])
-	w.Header().Set("Content-Type", "text/jsx")
+	w.Header().Set("Content-Type", "application/javascript")
 	http.ServeFile(w, r, r.URL.Path[1:])
 }
 
@@ -54,10 +53,9 @@ func menuItemHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		encoder := json.NewEncoder(w)
 		encoder.Encode(items)
-		w.Header().Set("Content-Type", "application/json")
-		return
 
 	case "POST":
 		decoder := json.NewDecoder(r.Body)
